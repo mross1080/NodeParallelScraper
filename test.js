@@ -52,21 +52,21 @@ var workers = {};
   	count++;
   	console.log("Count is now" + count);
     worker = cluster.fork();
-    worker[worker.process.pid] = param;
-    console.log(worker)
-    var param = paramsArray.pop();
-    console.log(param)
-    worker[worker.process.pid] = param;
-    worker.send(param);
+    // worker[worker.process.pid] = param;
+    //console.log(worker)
+    // var param = paramsArray.pop();
+    // console.log(param)
+    // worker[worker.process.pid] = param;
+    worker.send(paramsArray.pop());
   }
 
    console.log(cluster.workers.length)
 
   cluster.on('exit', function(worker, code, signal) {
     console.log('worker ' + worker.process.pid + ' died');
-    for(var x=0; x < workers[worker.process.pid].length; x++){
-    	console.log("Lost param" + workers[worker.process.pid][x]);
-    }
+    // for(var x=0; x < workers[worker.process.pid].length; x++){
+    // 	console.log("Lost param" + workers[worker.process.pid][x]);
+    // }
   });
 } else{
 	console.log('Hello from Worker ' + cluster.worker.id);
@@ -106,33 +106,19 @@ var workers = {};
 
 
 
-       console.log("Loaded HTML page")
 			$('.listing').filter(function(){
-				console.log("Current Object is ")
+			
 
-           // Let's store the data we filter into a variable so we can easily see what's going on.
-
-
-            //var category_title = data.children()._root['0'].children[0].data;
-         
 		        var data = $(this);
 		        var domArray = data.children()['1'];
-		        console.log(domArray.children[5].children[0].name)
-		       // console.log(data.children()['1'].children[5].children);
+
 		        for(var x=0; x < domArray.children.length; x++){
 		        	if(x%2){
 		        		//console.log(domArray.children[x].children[0].attribs);
 		        		hrefs.push("http://www.yelp.com" + domArray.children[x].children[0].attribs.href);
 		        	}
-		        	//console.log(domArray.children[x].children[0]);
-		        	// if(domArray[x].children.name == 'a'){
-		        	// 	console.log(domArray[x].attribs);
-		        	// }
+
 		        }
-
-
-		       // console.log("http://www.yelp.com" + data.children()._root['0'].parent.attribs.href);
-		       // hrefs.push("http://www.yelp.com" + data.children()._root['0'].parent.attribs.href);
 
 	        })
 // 	console.log(hrefs)
@@ -174,12 +160,7 @@ function scrapeListing(url){
 
      //  console.log("Loaded HTML page")
 			$('.sitemap-biz-by-letter').filter(function(){
-				//console.log("Current Object is ")
-
-           // Let's store the data we filter into a variable so we can easily see what's going on.
-
-
-            //var category_title = data.children()._root['0'].children[0].data;
+		
          var str= "";
 		        var data = $(this);
 		        //console.log(data.children()['1'].children[1].children[1].children);
@@ -214,4 +195,3 @@ function scrapeListing(url){
 
 
 }
-
