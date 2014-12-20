@@ -2,6 +2,16 @@
 /**
  * Module dependencies.
  */
+ var util = require('util');
+var Twit = require('twit');
+
+var cluster = require('cluster');
+var http = require('http');
+var numCPUs = require('os').cpus().length;
+var fs = require('fs');
+var request = require('request');
+var cheerio = require('cheerio');
+var async = require("async");
 var express = require('express');
 var fs = require('fs');
 var request = require('request');
@@ -33,8 +43,10 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/scrape',routes.scrape)
+// app.get('/scrape',routes.scrape)
 app.get("/runScraper", routes.runScraper);
+app.get("/getListings", routes.getListings);
+app.get("/removeListings", routes.removeListings);
 // app.get('/users', user.list);
 // app.post('/newJob',routes.newJob);
 // app.get('/applications', routes.applications);
@@ -42,3 +54,18 @@ app.get("/runScraper", routes.runScraper);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+// if(cluster.isMaster){
+// http.createServer(app).listen(app.get('port'), function(){
+//   console.log('Express server listening on port ' + app.get('port'));
+// });
+//  worker = cluster.fork();
+// } else {
+// 	http.createServer(function(req, res) {
+//   	console.log("server is running")
+//     res.writeHead(200);
+//     res.end("hello world\n");
+//       console.log('Express server listening on port ' + '8000');
+//   }).listen(8000);
+
+// }
