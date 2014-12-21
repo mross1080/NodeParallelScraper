@@ -11,6 +11,8 @@
     "mongoose": "^3.8.16",
     "request"    : "latest",
     "cheerio"    : "latest",
-    "async"       : "latest"
+    "async"       : "latest",
+    "locus"       : "latest",
+    "cluster"     : "debug"
   }
 }
