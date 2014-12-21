@@ -45,7 +45,6 @@ function runForks(){
 
 var worker;
 if (cluster.isMaster) {
-  console.log(cluster.workers);
   hash = {'0': [], '1': [], '2': [], '3': [], '4': [],'5': [],'6': [], '7': []}
   
   var alphabet = ("abcdefghijklmnopqrstuvwxyz").split("");
@@ -56,10 +55,20 @@ if (cluster.isMaster) {
   }
 
 var paramsArray = [];
+console.log("Number of cpus is " + numCPUs)
+console.log(alphabet.length)
+// var intialParamsPerWorker =alphabet.length /numCPUs;
+
+
+var numWorkers = numCPUs;
+var intialParamsPerWorker = parseInt(27/numWorkers);
+// var paramsRemeinder = alphabet.length % numCPUs;
+console.log(intialParamsPerWorker);
+console.log(paramsRemeinder)
   while(alphabet.length != 0){
   	var count =0;
   	var arr = [];
-  	while(count< 3 && alphabet.length != 0){
+  	while(count< intialParamsPerWorker && alphabet.length != 0){
   		arr.push(alphabet.pop());
   		count++;
   	}
@@ -69,10 +78,22 @@ var paramsArray = [];
 
   }
 
+ var paramsRemeinder = (27 % numWorkers);
+console.log("Remeinder is " + paramsRemeinder)
+ if(paramsRemeinder != 0){
+ var  remainingParams = paramsArray.pop();
+ console.log(remainingParams)
+ }
+
+  for(i in remainingParams){
+    paramsArray[i].push(remainingParams[i])
+  }
+
+
 
 var workers = {};
   // Fork workers.
-  for (var i = 0; i < numCPUs; i++) {
+  for (var i = 0; i < numWorkers; i++) {
   	
   	console.log("Forked")
   	count++;
@@ -86,7 +107,6 @@ var workers = {};
     worker.send(paramsArray.pop());
   }
 
-   console.log(cluster.workers.length)
 
   cluster.on('exit', function(worker, code, signal) {
     console.log('worker ' + worker.process.pid + ' died');
