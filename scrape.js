@@ -133,7 +133,6 @@ var workers = {};
 
 
 			$('.listing').filter(function(){
-			console.log("efs")
 
 		        var data = $(this);
 		        var domArray = data.children()['1'];
@@ -143,7 +142,7 @@ var workers = {};
 		        	if(x%2){
 		        		//console.log(domArray.children[x].children[0].attribs);
 		        		hrefs.push("http://www.yelp.com" + domArray.children[x].children[0].attribs.href);
-		        		console.log("http://www.yelp.com" + domArray.children[x].children[0].attribs.href)
+		        		// console.log("http://www.yelp.com" + domArray.children[x].children[0].attribs.href)
 		        	}
 
 		        }
@@ -176,7 +175,7 @@ var workers = {};
 }
 
 function scrapeListing(url){
-	console.log("Scraping " + url)
+	// console.log("Scraping " + url)
 	   var hrefs = [];
 	   var asyncTasks = [];
 
@@ -279,6 +278,6 @@ function scrapeListing(url){
 
 		}
 	})
-
+// console.log("Info on " + url "+ Saved to DB")
 
 }
