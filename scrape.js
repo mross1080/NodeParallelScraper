@@ -279,8 +279,7 @@ function scrapeListing(url){
 					  	companyName: companyName.substring(3, companyName.length).trim(),
 							category: category,
 							neighborhood:  neighborhood,
-							phoneNumber: phoneNumber,
-							letter: 
+							phoneNumber: phoneNumber
 					  	
 					  }).save( function( err, listing, count ){
 					  	if(err){
