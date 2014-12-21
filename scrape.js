@@ -37,8 +37,8 @@ mongoose.model("Listing",{
 
 var Listing = mongoose.model("Listing")
 
-
-scrapeListing("http://www.yelp.com/sm/los-angeles-ca-us/d/1")
+runForks()
+// scrapeListing("http://www.yelp.com/sm/los-angeles-ca-us/d/1")
 
 
 function runForks(){
@@ -150,24 +150,24 @@ var workers = {};
 
 	        })
 // // 	console.log(hrefs)
-// 	hrefs.forEach(function(currentUrl){
-//   asyncTasks.push(function(callback){
-//     // Make async call to scrape website
-//     request(currentUrl, function(error, response, html){
-//     	console.log(response);
-//     scrapeListing(currentUrl);
+	hrefs.forEach(function(currentUrl){
+  asyncTasks.push(function(callback){
+    // Make async call to scrape website
+    // request(currentUrl, function(error, response, html){
+    	console.log(response);
+    scrapeListing(currentUrl);
 
-//       callback();
-//     });
-//     count++;
-//   });
-// });
+      callback();
+    // });
+    count++;
+  });
+});
 
-// 	async.parallel(asyncTasks, function(){
+	async.parallel(asyncTasks, function(){
 
-//   // console.log("woo that worked");
-//   // console.log(count);
-// });
+  console.log("done scraping " + url);
+  // console.log(count);
+});
 
 
 		}
@@ -189,111 +189,89 @@ function scrapeListing(url){
 
      //  console.log("Loaded HTML page")
 			$('.sitemap-biz-by-letter').filter(function(){
-		
-         var str= "";
-         var address = "";
-		        var data = $(this);
-		        //console.log(data.children()['1'].children[1].children[1].children);
-		        var domArray = data.children()['1'].children[1].children[1];
-		        var companyInfoArray = domArray.children[71];
-		        var companyName;
-		        var phoneNumber = "";
-		        	var count =0;
-		        	for(var x =0; x< domArray.children.length; x++){
+	
+        var str= "";
+        var address = "";
+        var data = $(this);
+        //console.log(data.children()['1'].children[1].children[1].children);
+        var domArray = data.children()['1'].children[1].children[1];
+        var companyInfoArray = domArray.children[71];
+        var companyName;
+        var phoneNumber = "";
+        var count =0;
+	    	for(var x =0; x< domArray.children.length; x++){
 
-		        		if(domArray.children[x].type == "tag" ){
-		        			companyName = domArray.children[x].children[1].children[1].children[0].data;
-		        			var phoneNumber = "";
-		        			for(child in domArray.children[x].children){
-		        				if(domArray.children[x].children[child].type == "tag" ){
-		        					// console.log(domArray.children[x].children[child]);
-		        					if(domArray.children[x].children[child].attribs.class == 'biz-info' ){
+	    		if(domArray.children[x].type == "tag" ){
+	    			companyName = domArray.children[x].children[1].children[1].children[0].data;
+	    			var phoneNumber = "";
+	    			for(child in domArray.children[x].children){
+	    				if(domArray.children[x].children[child].type == "tag" ){
+	    					// console.log(domArray.children[x].children[child]);
+	    					if(domArray.children[x].children[child].attribs.class == 'biz-info' ){
 
-		        						bizInfo = domArray.children[x].children[child];
-		        						for(i in bizInfo.children){
-		        							if(bizInfo.children[i].type == "tag"){
-		        								if(bizInfo.children[i].name == "address"){
-		        									addressArray = bizInfo.children[i];
+	    						bizInfo = domArray.children[x].children[child];
+	    						for(i in bizInfo.children){
+	    							if(bizInfo.children[i].type == "tag"){
+	    								if(bizInfo.children[i].name == "address"){
+	    									addressArray = bizInfo.children[i];
 
-		        								for(var z=0; z< addressArray.children.length-1; z++){
-		        									//Every other element has the correct data
-		        								if(z %2 == 0){
+	    								for(var z=0; z< addressArray.children.length-1; z++){
+	    									//Every other element has the correct data
+	    								if(z %2 == 0){
 
-		        								address += addressArray.children[z].data.trim()
-		        							}
-		        						}
-		        							var phoneNumberLocation =addressArray.children[addressArray.children.length-1].data;
-		        							if (phoneNumberLocation != "") 	{
-		        								console.log("Phone number should be " + phoneNumberLocation.trim());
-		        								phoneNumber = phoneNumberLocation.trim();
-		        							}
-		        							}
-		        							}
-		        						 }
-		        						 // console.log(companyName);
-		        						// console.log(address);
+	    								address += addressArray.children[z].data.trim()
+	    							}
+	    						}
+	    							var phoneNumberLocation =addressArray.children[addressArray.children.length-1].data;
+	    							if (phoneNumberLocation != "") 	{
+	    								// console.log("Phone number should be " + phoneNumberLocation.trim());
+	    								phoneNumber = phoneNumberLocation.trim();
+	    							}
+	    							}
+	    							}
+	    						 }
+	    						 // console.log(companyName);
+	    						// console.log(address);
 
-		        						address = "";
-		        			 		 } else if (domArray.children[x].children[child].name == 'dl'){
-		        			 		 	var detailsArray = domArray.children[x].children[child].children;
-		        			 		 	var category = "";
-		        			 		 	var neighborhood = "";
-		        			 		 	for(index in detailsArray){
-		        			 		 		if(detailsArray[index].type == 'tag'){
-														// console.log(detailsArray[index].children[0].data);
-														if(detailsArray[index].children[0].data.trim() == 'Neighborhood:'){
-															 console.log("Neighborhood is " + detailsArray[index].next.next.children[0].data.trim());
-															 neighborhood = detailsArray[index].next.next.children[0].data.trim();
-														} else if (detailsArray[index].children[0].data.trim() == 'Category:'){
-															console.log("Category is " + detailsArray[index].next.next.children[0].data)
-															category = detailsArray[index].next.next.children[0].data.trim();
-														}
-		        			 		 		}
-		        			 		 		
-		        			 		 	}
-		        			 		 	// console.log(domArray.children[x].children[child].children[3].children[0].data);
-		        			 		 	// console.log(domArray.children[x].children[child].children[5].children[0].data);
+	    						address = "";
+	    			 		 } else if (domArray.children[x].children[child].name == 'dl'){
+	    			 		 	var detailsArray = domArray.children[x].children[child].children;
+	    			 		 	var category = "";
+	    			 		 	var neighborhood = "";
+	    			 		 	for(index in detailsArray){
+	    			 		 		if(detailsArray[index].type == 'tag'){
+											// console.log(detailsArray[index].children[0].data);
+											if(detailsArray[index].children[0].data.trim() == 'Neighborhood:'){
+												 // console.log("Neighborhood is " + detailsArray[index].next.next.children[0].data.trim());
+												 neighborhood = detailsArray[index].next.next.children[0].data.trim();
+											} else if (detailsArray[index].children[0].data.trim() == 'Category:'){
+												// console.log("Category is " + detailsArray[index].next.next.children[0].data)
+												category = detailsArray[index].next.next.children[0].data.trim();
+											}
+	    			 		 		}
+	    			 		 		
+	    			 		 	}
 
-		        			 		 }
-		        			  }	
-		        			}
-		        			console.log(companyName);
-		        			Listing({
-								  	companyName: companyName.substring(3, companyName.length),
-										category: category,
-										neighborhood:  neighborhood,
-										phoneNumber: phoneNumber
-								  	
-								  }).save( function( err, listing, count ){
-								  	if(err){
-								  		console.log(err);
-								  	} else{
-								  	console.log(listing);
-								  	console.log("listing saved");
-								    }
-								  });
-
-
-		        		}
-
-		        	}
-		      // }
-
-		        	// console.log(address)
-
-		        // 		companyName = domArray.children[x].children[1].children[1].children[0].data;
-
-		        // 		count++;
-		        // 		console.log(str.substring(3))
-
-		        		//console.log("http://www.yelp.com" + domArray.children[x].children[0].attribs.href);
-		        // 	 }
-
-		        // }
-
-
-		       // console.log("http://www.yelp.com" + data.children()._root['0'].parent.attribs.href);
-		       // hrefs.push("http://www.yelp.com" + data.children()._root['0'].parent.attribs.href);
+	    			 		 }
+	    			  }	
+	    			}
+	    			// console.log(companyName);
+	    			Listing({
+					  	companyName: companyName.substring(3, companyName.length),
+							category: category,
+							neighborhood:  neighborhood,
+							phoneNumber: phoneNumber
+					  	
+					  }).save( function( err, listing, count ){
+					  	if(err){
+					  		console.log(err);
+					  	} else{
+					  	// console.log(listing);
+					  	// console.log("listing saved");
+					    }
+					  });
+	    		}
+	    	}
 
 	        })
 // 	console.log(hrefs
