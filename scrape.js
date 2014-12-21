@@ -137,7 +137,7 @@ var workers = {};
 
 		        var data = $(this);
 		        var domArray = data.children()['1'];
-		        console.log(data)
+		        // console.log(data)
 
 		        for(var x=0; x < domArray.children.length; x++){
 		        	if(x%2){
