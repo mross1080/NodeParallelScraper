@@ -154,7 +154,7 @@ var workers = {};
   asyncTasks.push(function(callback){
     // Make async call to scrape website
     // request(currentUrl, function(error, response, html){
-    	console.log(response);
+    	// console.log(response);
     scrapeListing(currentUrl);
 
       callback();
