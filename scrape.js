@@ -276,10 +276,11 @@ function scrapeListing(url){
 	    			}
 	    			// console.log(companyName);
 	    			Listing({
-					  	companyName: companyName.substring(3, companyName.length),
+					  	companyName: companyName.substring(3, companyName.length).trim(),
 							category: category,
 							neighborhood:  neighborhood,
-							phoneNumber: phoneNumber
+							phoneNumber: phoneNumber,
+							letter: 
 					  	
 					  }).save( function( err, listing, count ){
 					  	if(err){
