@@ -14,3 +14,31 @@ Main Points:
 	The scraper is set up to run on a Amazon EC2 instance, right now I'm on the free tier so it is only running on one virtual core, but all you have to do is pay for more cores and the running time gets exponentially faster.  
 * Plus: Scalable script to crawl across the entire US. (may take more time / instance)
 	Just need more cores, possibly another instance of the server with multiple cores.  You would also need a web app to distribute the jobs to the individual servers.  
+
+Documentation:
+==============
+
+How to ssh onto the EC2 instance
+--------------------------------
+* ssh-add yoursshkey.pem
+* ssh -i yoursshkey.pem ubuntu@elastic-ip-address
+
+How to change the Elastic IP Address
+--------------------------------
+
+
+*In the EC2 management console go to the Elastic IP secion
+* The free tier can only have 5 Ip addresses so how you go from here depends on how much money you're spending
+* Click on the unused Elastic IP Address, and associate it with your scraper instance.
+
+Current API Endpoints
+--------------------------------
+
+* post /search 
+** Returns results of desired query
+
+* get /getListings
+** Returns JSON of all business listings
+
+* get /removeListings
+** Drops all collections in the DB(_Maybe not the most secure method..._)
