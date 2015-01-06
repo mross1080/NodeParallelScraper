@@ -3,7 +3,7 @@
  * Module dependencies.
  */
  var util = require('util');
-var Twit = require('twit');
+
 
 var cluster = require('cluster');
 var http = require('http');
