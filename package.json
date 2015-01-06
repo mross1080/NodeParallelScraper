@@ -12,7 +12,6 @@
     "request"    : "latest",
     "cheerio"    : "latest",
     "async"       : "latest",
-    "locus"       : "latest",
-    "cluster"     : "debug"
+    "locus"       : "latest"
   }
 }
