@@ -47,6 +47,8 @@ app.get('/', routes.index);
 app.get("/runScraper", routes.runScraper);
 app.get("/getListings", routes.getListings);
 app.get("/removeListings", routes.removeListings);
+app.get("/searchPage",routes.searchpage)
+app.post("/search",routes.search);
 // app.get('/users', user.list);
 // app.post('/newJob',routes.newJob);
 // app.get('/applications', routes.applications);

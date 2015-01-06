@@ -11,13 +11,12 @@ var request = require('request');
 var cheerio = require('cheerio');
 var async = require("async");
 var debug = require("debug");
-// scrapemain();
 var count =0;
-// runForks()
+
+
 var businessCount =0;
 var mongoose = require('mongoose');
-// var listingSchema = require('schemas/listing.js');
-// var listingSchema = require('listing/listing');
+
 mongoose.connect('mongodb://player1:arduino@ds053320.mongolab.com:53320/simonsays',function(error){
 	if(error){
 		console.log(error);
@@ -57,12 +56,10 @@ if (cluster.isMaster) {
 var paramsArray = [];
 console.log("Number of cpus is " + numCPUs)
 console.log(alphabet.length)
-// var intialParamsPerWorker =alphabet.length /numCPUs;
-
 
 var numWorkers = numCPUs;
 var intialParamsPerWorker = parseInt(27/numWorkers);
-// var paramsRemeinder = alphabet.length % numCPUs;
+
 console.log(intialParamsPerWorker);
 console.log(paramsRemeinder)
   while(alphabet.length != 0){
@@ -110,10 +107,8 @@ var workers = {};
 
   cluster.on('exit', function(worker, code, signal) {
     console.log('worker ' + worker.process.pid + ' died');
-    // for(var x=0; x < workers[worker.process.pid].length; x++){
-    // 	console.log("Lost param" + workers[worker.process.pid][x]);
-    // }
   });
+
 } else{
 	console.log('Hello from Worker ' + cluster.worker.id);
 	process.on('message', function(params) {
@@ -122,21 +117,6 @@ var workers = {};
   }
   });
 }
-
-
-
-// } else {
-
-
-//   // Workers can share any TCP connection
-//   // In this case its a HTTP server
-//   http.createServer(function(req, res) {
-//   	console.log("server is running")
-//     res.writeHead(200);
-//     res.end("hello world\n");
-//   }).listen(8000);
-// }
-	console.log(count);
 }
  function scrapemain(param){
 	url = 'http://www.yelp.com/sm/los-angeles-ca-us/' + param;
@@ -150,35 +130,27 @@ var workers = {};
 		if(!error){
 			var $ = cheerio.load(html);
 
-
-
 			$('.listing').filter(function(){
 
 		        var data = $(this);
 		        var domArray = data.children()['1'];
-		        // console.log(data)
 
 		        for(var x=0; x < domArray.children.length; x++){
 		        	if(x%2){
-		        		//console.log(domArray.children[x].children[0].attribs);
+		        		// Only every other element is what we want
 		        		hrefs.push("http://www.yelp.com" + domArray.children[x].children[0].attribs.href);
-		        		// console.log("http://www.yelp.com" + domArray.children[x].children[0].attribs.href)
 		        	}
 
 		        }
 
 	        })
-// // 	console.log(hrefs)
-	hrefs.forEach(function(currentUrl){
-  asyncTasks.push(function(callback){
-    // Make async call to scrape website
-    // request(currentUrl, function(error, response, html){
-    	// console.log(response);
-    scrapeListing(currentUrl);
 
-      callback();
-    // });
-    count++;
+	hrefs.forEach(function(currentUrl){
+  	asyncTasks.push(function(callback){
+    	// Make async call to scrape website
+    	scrapeListing(currentUrl);
+    	//Wait for everything to be added to DB
+   	  callback();
   });
 });
 

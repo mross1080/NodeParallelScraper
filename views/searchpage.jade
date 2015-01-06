@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	form(action="/search", method="post")
+		.row
+			input(type="text", name="Query", placeholder="Search for an Article", class="form-control")
+			.row
+				.col-md-8.col-md-offset-2
+			input(class="btn btn-success form-control" type="submit" value="Submit")

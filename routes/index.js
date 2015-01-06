@@ -28,9 +28,35 @@ exports.getListings = function(req,res){
 	});
 }
 
+exports.searchpage= function(req, res){
+	res.render("searchpage");
+}
+
+exports.search= function(req, res){
+
+	var results = [];
+	var query = req.body.Query
+
+		Listing.find({companyName: query}, function(err,docs){
+						console.log(docs);
+		for(var x=0; x < docs.length; x++){
+				console.log("current object is " + docs[x]) 
+					if(docs[x].companyName.trim() == query.trim()){
+						// results.push(docs[x].title);
+					}
+			}
+		res.render("searchresults", {results:docs});
+	})
+	console.log(req.body);
+}
+
+
 exports.removeListings = function(req,res){
 			Listing.remove({}, function(err,docs){
 	})
+			res.render('index', { title: 'Express' });
+
+
 }
 exports.runScraper = function(req, res){
 	
